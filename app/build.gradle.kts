@@ -72,4 +72,8 @@ dependencies {
 
     // acceso a intrnet
     implementation ("io.coil-kt:coil-compose:2.4.0")
+
+    // MAPS API
+    implementation ("com.google.android.material:material:1.12.0")
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
 }

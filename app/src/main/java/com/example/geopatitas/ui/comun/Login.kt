@@ -20,7 +20,7 @@ fun LoginScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Bienvenido a App Perritos", style = MaterialTheme.typography.headlineMedium)
+            Text("Bienvenido a GeoPatitas", style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(24.dp))
             Button(onClick = { navController.navigate("dashboard_ciudadano") }) {
                 Text("Entrar como Ciudadano")
