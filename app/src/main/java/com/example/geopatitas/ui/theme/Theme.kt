@@ -11,6 +11,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
+/*
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
@@ -32,7 +33,69 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
+*/
+// NUEVO
 
+private val LightColors = lightColorScheme(
+    primary = Primary,
+    onPrimary = OnPrimary,
+    primaryContainer = PrimaryLight,
+    onPrimaryContainer = OnPrimary,
+
+    secondary = Secondary,
+    onSecondary = OnSecondary,
+    secondaryContainer = SecondaryLight,
+    onSecondaryContainer = OnSecondary,
+
+    background = BackgroundLight,
+    onBackground = OnBackground,
+
+    surface = SurfaceLight,
+    onSurface = OnSurface,
+
+    error = Error,
+    onError = OnError
+)
+
+private val DarkColors = darkColorScheme(
+    primary = PrimaryLight,
+    onPrimary = OnPrimary,
+    primaryContainer = PrimaryDark,
+    onPrimaryContainer = OnPrimary,
+
+    secondary = SecondaryDark,
+    onSecondary = OnSecondary,
+    secondaryContainer = SecondaryDark,
+    onSecondaryContainer = OnSecondary,
+
+    background = BackgroundDark,
+    onBackground = OnBackground,
+
+    surface = SurfaceDark,
+    onSurface = OnSurface,
+
+    error = Error,
+    onError = OnError
+)
+
+@Composable
+fun GeoPatitasTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    val colors = if (darkTheme) DarkColors else LightColors
+
+    MaterialTheme(
+        colorScheme = colors,
+        typography = Typography
+    ) {
+        AppBackground(imageUrl = "https://i.pinimg.com/736x/9b/e4/94/9be4946bf3984d53623333eefc6572f8.jpg")  {
+            content()
+        }
+    }
+}
+
+/* OLD THEME
 @Composable
 fun GeoPatitasTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -56,3 +119,5 @@ fun GeoPatitasTheme(
         content = content
     )
 }
+
+*/

@@ -7,10 +7,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.geopatitas.model.Reporte
+import com.example.geopatitas.ui.theme.AppBackground
 import com.example.geopatitas.utils.LocationUtils
 import com.example.geopatitas.utils.guardarReporte
 
@@ -45,71 +47,81 @@ fun ReporteFormScreen(navController: NavController) {
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Pantalla de Reporte de Perritos", style = MaterialTheme.typography.headlineMedium)
+    AppBackground(imageUrl = "https://i.pinimg.com/736x/9b/e4/94/9be4946bf3984d53623333eefc6572f8.jpg", overlayAlpha = 0.85f ){
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text("Ubicación: Lat: $latitude, Long: $longitude", style = MaterialTheme.typography.bodyMedium)
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Tipo de Animal
-        Text("Tipo de Animal:", style = MaterialTheme.typography.bodyLarge)
-        SelectorDropdown(
-            selected = tipoAnimal,
-            options = listOf("Perro", "Gato", "Otro"),
-            onSelected = { tipoAnimal = it }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Características
-        Text("Características:", style = MaterialTheme.typography.bodyLarge)
-        SelectorDropdown(
-            selected = caracter,
-            options = listOf("Agresivo", "Cariñoso", "Miedoso", "Pacífico"),
-            onSelected = { caracter = it }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Apariencia
-        Text("Apariencia:", style = MaterialTheme.typography.bodyLarge)
-        SelectorDropdown(
-            selected = apariencia,
-            options = listOf("Saludable", "Con Heridas Leves", "Con Heridas Graves", "Muy Delgado", "Con Sobrepeso"),
-            onSelected = { apariencia = it }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Botón para enviar reporte
-        Button(
-            onClick = {
-                val reporte = Reporte(
-                    tipoAnimal = tipoAnimal,
-                    caracterAnimal = caracter,
-                    aparienciaAnimal = apariencia,
-                    ubicacion = mapOf("latitude" to latitude, "longitude" to longitude),
-                    fechaCreacion = com.google.firebase.Timestamp.now()
-                )
-                guardarReporte(reporte)
-                Toast.makeText(context, "Reporte Enviado", Toast.LENGTH_SHORT).show()
-                // Navegar a la pantalla de mapa
-                navController.navigate("mapa_ciudadano") // Aquí navegas al mapa después de guardar el reporte
-            },
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Enviar Reporte")
+            Text("Reporte de Perritos", style = MaterialTheme.typography.headlineMedium)
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Ubicación: Lat: ${"%.3f".format(latitude)}, Long: ${"%.3f".format(longitude)}",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Tipo de Animal
+            Text("Tipo de Animal:", style = MaterialTheme.typography.bodyLarge)
+            SelectorDropdown(
+                selected = tipoAnimal,
+                options = listOf("Perro", "Gato", "Otro"),
+                onSelected = { tipoAnimal = it }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Características
+            Text("Características:", style = MaterialTheme.typography.bodyLarge)
+            SelectorDropdown(
+                selected = caracter,
+                options = listOf("Agresivo", "Cariñoso", "Miedoso", "Pacífico"),
+                onSelected = { caracter = it }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Apariencia
+            Text("Apariencia:", style = MaterialTheme.typography.bodyLarge)
+            SelectorDropdown(
+                selected = apariencia,
+                options = listOf("Saludable", "Con Heridas Leves", "Con Heridas Graves", "Muy Delgado", "Con Sobrepeso"),
+                onSelected = { apariencia = it }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Botón para enviar reporte
+            Button(
+                onClick = {
+                    val reporte = Reporte(
+                        tipoAnimal = tipoAnimal,
+                        caracterAnimal = caracter,
+                        aparienciaAnimal = apariencia,
+                        ubicacion = mapOf("latitude" to latitude, "longitude" to longitude),
+                        fechaCreacion = com.google.firebase.Timestamp.now()
+                    )
+                    guardarReporte(reporte)
+                    Toast.makeText(context, "Reporte Enviado", Toast.LENGTH_SHORT).show()
+                    // Navegar a la pantalla de mapa
+                    navController.navigate("mapa_ciudadano") // Aquí navegas al mapa después de guardar el reporte
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Enviar Reporte")
+            }
         }
+
     }
+
 }
 
 @Composable

@@ -69,4 +69,7 @@ dependencies {
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.google.firebase:firebase-firestore")
+
+    // acceso a intrnet
+    implementation ("io.coil-kt:coil-compose:2.4.0")
 }

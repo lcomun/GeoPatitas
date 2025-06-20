@@ -7,29 +7,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.geopatitas.ui.theme.AppBackground
 
 @Composable
 fun OrganizacionesScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Lista de ONGs", style = MaterialTheme.typography.headlineMedium)
 
-        Spacer(modifier = Modifier.height(24.dp))
+    AppBackground(imageUrl = "https://i.pinimg.com/736x/9b/e4/94/9be4946bf3984d53623333eefc6572f8.jpg", overlayAlpha = 0.85f ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Lista de ONGs", style = MaterialTheme.typography.headlineMedium)
 
-        // Aquí se pueden listar las ONGs disponibles
-        Text("ONG 1: Fundación Perritos Felices", style = MaterialTheme.typography.bodyLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("ONG 2: Refugio Animal", style = MaterialTheme.typography.bodyLarge)
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Spacer(modifier = Modifier.height(24.dp))
+            // Aquí se pueden listar las ONGs disponibles
+            Text("ONG 1: Fundación Perritos Felices", style = MaterialTheme.typography.bodyLarge)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text("ONG 2: Refugio Animal", style = MaterialTheme.typography.bodyLarge)
 
-        Button(onClick = { navController.navigate("dashboard_ciudadano") }) {
-            Text("Volver al Dashboard")
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(onClick = { navController.navigate("dashboard_ciudadano") }) {
+                Text("Volver al Dashboard")
+            }
         }
+
     }
 }

@@ -7,27 +7,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.geopatitas.ui.theme.AppBackground
 
 @Composable
 fun OrganizacionPerfilScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Perfil ONG", style = MaterialTheme.typography.headlineMedium)
 
-        Spacer(modifier = Modifier.height(24.dp))
+    AppBackground(imageUrl = "https://i.pinimg.com/736x/9b/e4/94/9be4946bf3984d53623333eefc6572f8.jpg", overlayAlpha = 0.85f ) {
 
-        Text("Nombre: Refugio Perritos Felices", style = MaterialTheme.typography.bodyLarge)
-        Text("Correo: contacto@refugioperritosfelices.org", style = MaterialTheme.typography.bodyLarge)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Perfil ONG", style = MaterialTheme.typography.headlineMedium)
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Button(onClick = { navController.navigate("login") }) {
-            Text("Cerrar Sesión")
+            Text("Nombre: Refugio Perritos Felices", style = MaterialTheme.typography.bodyLarge)
+            Text(
+                "Correo: contacto@refugioperritosfelices.org",
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(onClick = { navController.navigate("login") }) {
+                Text("Cerrar Sesión")
+            }
         }
+
     }
 }
