@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "49263244693",
+    "project_id": "geopatitas-a2726",
+    "storage_bucket": "geopatitas-a2726.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49263244693:android:25c75fe280d0430f7af29c",
+        "android_client_info": {
+          "package_name": "com.example.geopatitas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49263244693-ksu0eq5qs5im11rgjlh942vgv1l54bvm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ3p0hyGXWyWZ7pmn5RTIrCA60dSWstxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "49263244693-ksu0eq5qs5im11rgjlh942vgv1l54bvm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
