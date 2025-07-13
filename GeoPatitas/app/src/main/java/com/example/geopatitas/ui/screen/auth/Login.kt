@@ -89,7 +89,7 @@ fun LoginScreen(navController: NavController) {
                         popUpTo("login_route") { inclusive = true } // Limpia el back stack
                     }
 
-                    "Aliado" -> navController.navigate("organizacion_dashboard") {
+                    "Aliado" -> navController.navigate(AppDestinations.AliadoFlow.DASHBOARD) {
                         popUpTo("login_route") { inclusive = true }
                     }
 

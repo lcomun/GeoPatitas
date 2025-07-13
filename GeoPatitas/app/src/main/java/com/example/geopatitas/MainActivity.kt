@@ -31,11 +31,8 @@ import com.example.geopatitas.data.repository.AuthRepository
 import com.example.geopatitas.data.repository.AuthRepository2
 import com.example.geopatitas.data.repository.UserRepository
 import com.example.geopatitas.ui.screen.aliado.AliadoDashboardScreen
-import com.example.geopatitas.ui.screen.auth.LoginScreen2
 import com.example.geopatitas.utils.LocationUtils
 import com.example.geopatitas.ui.viewmodel.CurrentUserState
-import com.example.geopatitas.ui.viewmodel.LoginVM
-import com.example.geopatitas.ui.viewmodel.UserVM
 import com.example.geopatitas.ui.viewmodel.UserViewModel
 import com.example.geopatitas.utils.GoogleSignInUtils
 
@@ -56,13 +53,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// ---
-// Bloque de Dependencias y ViewModel Factory
-// ---
-/**
- * Provee las dependencias necesarias para los repositorios y ViewModels.
- * En una aplicación real, se usaría una librería de inyección de dependencias como Hilt o Koin.
- */
 @Composable
 fun provideAppDependencies(): Triple<AuthRepository, UserRepository, androidx.lifecycle.ViewModelProvider.Factory> {
     val authRepository = remember { AuthRepository() }
@@ -75,30 +65,6 @@ fun provideAppDependencies(): Triple<AuthRepository, UserRepository, androidx.li
                 if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
                     @Suppress("UNCHECKED_CAST")
                     return UserViewModel(
-                        authRepository = authRepository,
-                        userRepository = userRepository
-                    ) as T
-                }
-                throw IllegalArgumentException("Unknown ViewModel class")
-            }
-        }
-    }
-    return Triple(authRepository, userRepository, userViewModelFactory)
-}
-
-@Composable
-fun provideAppDependencies2(context: Context): Triple<AuthRepository2, UserRepository, androidx.lifecycle.ViewModelProvider.Factory> {
-    val g = GoogleSignInUtils(context)
-    val authRepository = remember { AuthRepository2(g) }
-    val userFirestoreDataSource = remember { UsuarioFirestoreDataSource() }
-    val userRepository = remember { UserRepository(userFirestoreDataSource) }
-
-    val userViewModelFactory = remember {
-        object : androidx.lifecycle.ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(UserVM::class.java)) {
-                    @Suppress("UNCHECKED_CAST")
-                    return UserVM(
                         authRepository = authRepository,
                         userRepository = userRepository
                     ) as T
@@ -138,12 +104,7 @@ fun AppContent() {
     }
 }
 
-// ---
-// Bloque de Lógica de Inicio de Sesión
-// ---
-/**
- * Determina la ruta de inicio de la navegación basándose en el estado actual del usuario.
- */
+
 @Composable
 fun determineStartDestination(currentUserState: CurrentUserState): String {
     return when (currentUserState) {
@@ -264,112 +225,5 @@ fun NavGraphBuilder.aliadoNavGraph(
                 userViewModel = scopedUserViewModel
             )
         }
-    }
-}
-
-//_------------------------------------------------------------------------
-
-
-@Composable
-fun AppContent2() {
-    val context = LocalContext.current
-    val (authRepository2, userRepository, userVMFactory) = provideAppDependencies2(context)
-    val navController = rememberNavController()
-
-    val userVM: UserVM = viewModel(factory = userVMFactory)
-    val currentUserState by userVM.currentUserData.collectAsState()
-
-    // Crear LoginVM solo si el usuario no está autenticado
-    val loginVM = remember(currentUserState) {
-        if (currentUserState is CurrentUserState.Unauthenticated || currentUserState is CurrentUserState.Error) {
-            LoginVM(authRepository = authRepository2, userRepository = userRepository)
-        } else null
-    }
-
-    val startDestination = determineStartDestination(currentUserState)
-
-    GeoPatitasTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            if (startDestination != AppDestinations.LOADING_ROUTE) {
-                AppNavHost2(
-                    navController = navController,
-                    startDestination = startDestination,
-                    userViewModelFactory = userVMFactory,
-                    userVM = userVM,
-                    loginVM = loginVM
-                )
-            } else {
-                LoadingScreen()
-            }
-        }
-    }
-}
-
-//----------------------------------------
-
-@Composable
-fun AppNavHost2(
-    navController: NavHostController,
-    startDestination: String,
-    userViewModelFactory: androidx.lifecycle.ViewModelProvider.Factory,
-    userVM: UserVM,
-    loginVM: LoginVM?
-) {
-    NavHost(
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable(AppDestinations.LOADING_ROUTE) {
-            LoadingScreen()
-        }
-
-        composable(AppDestinations.LOGIN_ROUTE) {
-            if (loginVM != null) {
-                LoginScreen2(
-                    navController,
-                    loginVM = loginVM,
-                    userVM = userVM,
-                    onLoginSuccess = {
-                        // Aquí se navega según tipoUsuario del usuario cargado en userVM
-                        when (val currentUser = userVM.currentUserData.value) {
-                            is CurrentUserState.Success -> {
-                                when (currentUser.user.tipoUsuario) {
-                                    "Vecino" -> navController.navigate(AppDestinations.VecinoFlow.ROOT) {
-                                        popUpTo(AppDestinations.LOGIN_ROUTE) { inclusive = true }
-                                    }
-                                    "Aliado" -> navController.navigate(AppDestinations.AliadoFlow.ROOT) {
-                                        popUpTo(AppDestinations.LOGIN_ROUTE) { inclusive = true }
-                                    }
-                                    else -> {
-                                        // Si tipoUsuario no reconocido, volver al login o mostrar error
-                                        navController.navigate(AppDestinations.LOGIN_ROUTE)
-                                    }
-                                }
-                            }
-                            else -> {
-                                // Si el usuario no está cargado aún, queda en login o mostrar error
-                            }
-                        }
-                    }
-                )
-            } else {
-                LoadingScreen()
-            }
-        }
-
-        composable(
-            AppDestinations.CREAR_CUENTA_ROUTE,
-            arguments = listOf(
-                navArgument("nombre") { defaultValue = "" },
-                navArgument("correo") { defaultValue = "" }
-            )
-        ) { backStackEntry ->
-            val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
-            val correo = backStackEntry.arguments?.getString("correo") ?: ""
-            SignUpScreen(navController, nombre, correo)
-        }
-
-        ciudadanoNavGraph(navController, userViewModelFactory)
-        aliadoNavGraph(navController, userViewModelFactory)
     }
 }
